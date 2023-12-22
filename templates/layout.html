@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>RADAR: {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='radar.css') }}"/>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a href="{{ url_for('settings') }}">Configuration</a></li>
+        </ul>
+      </nav>
+    </header>
+    {% block content %}{% endblock %}
+
+    <footer>
+    </footer>
+  </body>
+</html>

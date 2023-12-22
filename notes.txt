@@ -1,0 +1,2 @@
+For polycules exceeding 64 members, the check_in partner_id_bitmap will need to be stored as a BLOB, not an INTEGER.
+

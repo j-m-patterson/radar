@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h1>RADAR check-ins: Choose partners to check-in with</h1>
+    <h2>Partners</h2>
+	{% if partners %}
+	<form method="POST">
+            <ul>
+                {% for item in partners %}
+                    <li><input type="checkbox" name="partner_check" value="{{ item[0] }}"> {{ item[1] }}</li>
+                {% endfor %}
+            </ul>
+	</form>
+        {% endif %}
+
+{% endblock %}

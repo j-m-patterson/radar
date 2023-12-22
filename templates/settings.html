@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+    <h1>RADAR Settings</h1>
+
+<h2>Partners</h2>
+Here are the current partners in this polycule. If a partner needs to be added, put their name in the box below. Once added, partners cannot be removed, even if they are inactive.
+<form method="POST">
+<ul>
+	{% if partners %}
+		{% for item in partners %}
+			<li> {{ item }}</li>
+		{% endfor %}
+	{% endif %}
+	<li><input type="text" name="new_partner"></li>
+</ul>
+</form>
+
+<h2>Agenda Items</h2>
+Here is a list of agenda items that can be selected to discuss in check-ins. Common topics should be added here, one-off topics can use the "other" option.
+<form method="POST">
+<ul>
+	{% if agenda_items %}
+		{% for item in agenda_items %}
+			<li>{{ item }}</li>
+		{% endfor %}
+	{% endif %}
+	<li><input type="text" name="new_agenda_item"> </li>
+</ul>
+</form>
+{% endblock %}
