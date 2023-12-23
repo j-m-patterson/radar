@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}Discussion and Action Points{% endblock %}
+{% block content %}
+    <h1>RADAR check-ins: Agenda Item Discussion and Action Points</h1>
+
+    <h2>Discussion</h2>
+	<form method="POST">
+            <ul>
+	{% if discussion_points %}
+                {% for item in discussion_points %}
+                    <li>{{ item[0] }}</li>
+                {% endfor %}
+        {% endif %}
+		    <li>
+			<select name="agenda_item" id="agenda_item">
+			     {% for agenda_item in agenda_items %}
+				<option value={{ agenda_item[0] }} > {{ agenda_item[1] }}</option>
+			    {% endfor %}
+			</select>
+			<input type="text" name="new_discussion_point">
+		    </li>
+            </ul>
+	</form>
+    <h2>Action Points</h2>
+
+{% endblock %}

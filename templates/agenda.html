@@ -3,7 +3,7 @@
 {% block content %}
     <h1>RADAR check-ins: Agree to Agenda</h1>
     <h2>Choose the agenda items that need discussion during this check-in</h2>
-	<form method="POST" action="{{ url_for('review') }}">
+	<form method="POST" action="{{ url_for('discuss') }}">
 	{% if agenda_items %}
 	    <ul>
                 {% for item in agenda_items %}

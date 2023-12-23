@@ -6,7 +6,8 @@ from flask import Flask, render_template, request, redirect, url_for
 app = Flask(__name__)
 
 # Create a SQLite database connection and cursor
-db_path = 'radar.db'
+ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
+db_path = os.path.join(ROOT_DIR, 'radar.db')
 
 # inject enumerate
 @app.context_processor
@@ -48,28 +49,52 @@ def settings():
     agenda_items = cursor.fetchall()
     return render_template('settings.html', partners=partners, agenda_items=agenda_items)
 
-@app.route('/add_check_in', methods=['POST'])
-def add_check_in():
+@app.route('/review', methods=['POST'])
+def review():
     #connect to db
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    participant = request.form.get('participant')
-    review_checkboxes = request.form.getlist('review_check')
-    agenda_checkboxes = request.form.getlist('agenda_check')
-    agenda_textboxes = request.form.getlist('agenda_text')
-    discuss_textboxes = request.form.getlist('discuss_text')
-    action_point_textboxes = request.form.getlist('action_point_text')
+    #calculate partner bitmap INT
+    partner_bitmap = 0
+    for partner_id in request.form["partner_check"]:
+        partner_bitmap += 2**int(partner_id)
+    #get list of check-ins for this partner bitmap
+    query = 'SELECT * from check_in WHERE partner_id_bitmap = ?'
+    cursor.execute(query, (partner_bitmap,))
+    check_ins = cursor.fetchall()
+    #get list of unresolved action points from those check-ins
+    checkinlist = []
+    for item in check_ins:
+        checkinlist.append(item[0])
+    query = "select * from discuss_action_points where is_resolved = FALSE and check_in_id in (%s)" % ",".join(map(str,checkinlist))
+    cursor.execute(query)
+    action_points = cursor.fetchall()
+    return render_template('review.html', action_points=action_points, check_ins=check_ins)
 
-    # Save the check-in to the database
-    cursor.execute('''
-        INSERT INTO check_ins (
-            participant, review_checkboxes, agenda_checkboxes, discuss_textboxes, action_point_textboxes
-        ) VALUES (?, ?, ?, ?, ?)
-    ''', (participant, str(review_checkboxes), str(agenda_checkboxes), str(discuss_textboxes), str(action_point_textboxes)))
+@app.route('/agenda', methods=['POST'])
+def agenda():
+    #connect to db
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    # Fetch agenda_items from the database
+    cursor.execute('SELECT * FROM agenda_item')
+    agenda_items = cursor.fetchall()
+    return render_template('agenda.html', agenda_items=agenda_items)
 
-    conn.commit()
+@app.route('/discuss', methods=['POST'])
+def discuss():
+    #connect to db
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    #list discussions and action points from the current check_in
+    return render_template('discuss.html')
 
-    return redirect(url_for('index'))
+@app.route('/view_check_in', methods=['GET'])
+def view_check_in():
+    #connect to db
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    return render_template('view_check_in.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
