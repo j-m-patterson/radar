@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Agenda{% endblock %}
+{% block content %}
+    <h1>RADAR check-ins: Agree to Agenda</h1>
+    <h2>Choose the agenda items that need discussion during this check-in</h2>
+	<form method="POST" action="{{ url_for('review') }}">
+	{% if agenda_items %}
+	    <ul>
+                {% for item in agenda_items %}
+                        <li><input type="checkbox" name="agenda_check" value="{{ item[0] }}"> {{ item[1] }}</li>
+                {% endfor %}
+			<li><input type="checkbox" name="agenda_check" value=0>Other: <input type="text" name="agenda_other"></li>
+	    </ul>
+        {% endif %}
+	<button type=submit>Discuss checked agenda items</button>
+	</form>
+{% endblock %}

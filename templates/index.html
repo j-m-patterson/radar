@@ -4,12 +4,13 @@
     <h1>RADAR check-ins: Choose partners to check-in with</h1>
     <h2>Partners</h2>
 	{% if partners %}
-	<form method="POST">
+	<form method="POST" action={{ url_for('review') }}>
             <ul>
                 {% for item in partners %}
                     <li><input type="checkbox" name="partner_check" value="{{ item[0] }}"> {{ item[1] }}</li>
                 {% endfor %}
             </ul>
+	    <button type=submit>Review check-ins</button>
 	</form>
         {% endif %}
 

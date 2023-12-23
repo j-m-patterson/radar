@@ -9,7 +9,7 @@ Here are the current partners in this polycule. If a partner needs to be added, 
 <ul>
 	{% if partners %}
 		{% for item in partners %}
-			<li> {{ item }}</li>
+			<li> {{ item[0] }}</li>
 		{% endfor %}
 	{% endif %}
 	<li><input type="text" name="new_partner"></li>
@@ -22,7 +22,7 @@ Here is a list of agenda items that can be selected to discuss in check-ins. Com
 <ul>
 	{% if agenda_items %}
 		{% for item in agenda_items %}
-			<li>{{ item }}</li>
+			<li>{{ item[0] }}</li>
 		{% endfor %}
 	{% endif %}
 	<li><input type="text" name="new_agenda_item"> </li>

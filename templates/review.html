@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Review{% endblock %}
+{% block content %}
+    <h1>RADAR check-ins: Choose a check-in to view, or review action points for a new check-in</h1>
+    <h2>Unresolved action points for review</h2>
+	<form method="POST" action="{{ url_for('agenda') }}">
+	{% if action_points %}
+            <ul>
+                {% for item in action_points %}
+                    <li><input type="checkbox" name="partner_check" value="{{ item[0] }}"> {{ item[1] }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+	<button type=submit>Resolve checked action points and begin new check-in</button>
+	</form>
+    <h2>The selected partners have had the following check-ins, which can be reviewed by following the links</h2>
+	{% if check_ins %}
+		<ul>
+			{% for item in check_ins %}
+				<li><a href={{ url_for('view_check_in', check_in_id=item[0] }}>{{ item[1] }}</a></li>
+			{% endfor %}
+	{% endif %}
+
+{% endblock %}
