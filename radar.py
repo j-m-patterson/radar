@@ -23,6 +23,7 @@ def index():
     # Fetch partners from the database
     cursor.execute('SELECT * FROM partner')
     partners = cursor.fetchall()
+    cursor.close()
     return render_template('index.html', partners=partners)
 
 @app.route('/settings', methods=['POST','GET'])
@@ -47,6 +48,7 @@ def settings():
     # Fetch agenda_items from the database
     cursor.execute('SELECT item_descr FROM agenda_item')
     agenda_items = cursor.fetchall()
+    cursor.close()
     return render_template('settings.html', partners=partners, agenda_items=agenda_items)
 
 @app.route('/review', methods=['POST'])
@@ -69,6 +71,7 @@ def review():
     query = "select * from discuss_action_points where is_resolved = FALSE and check_in_id in (%s)" % ",".join(map(str,checkinlist))
     cursor.execute(query)
     action_points = cursor.fetchall()
+    cursor.close()
     return render_template('review.html', action_points=action_points, check_ins=check_ins)
 
 @app.route('/agenda', methods=['POST'])
@@ -79,6 +82,7 @@ def agenda():
     # Fetch agenda_items from the database
     cursor.execute('SELECT * FROM agenda_item')
     agenda_items = cursor.fetchall()
+    cursor.close()
     return render_template('agenda.html', agenda_items=agenda_items)
 
 @app.route('/discuss', methods=['POST'])
@@ -87,6 +91,7 @@ def discuss():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     #list discussions and action points from the current check_in
+    cursor.close()
     return render_template('discuss.html')
 
 @app.route('/view_check_in', methods=['GET'])
@@ -94,6 +99,7 @@ def view_check_in():
     #connect to db
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
+    cursor.close()
     return render_template('view_check_in.html')
 
 if __name__ == '__main__':

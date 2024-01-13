@@ -1,2 +1,28 @@
 For polycules exceeding 64 members, the check_in partner_id_bitmap will need to be stored as a BLOB, not an INTEGER.
 
+While that first note was amusing, I think it points out that I want this to go in a slightly different direction,
+And while I'm not ready to make the changes needed until I have the basic functionality in place, I thought
+I should make some notes on what those changes are.
+
+While the partner_id_bitmap was a fun and clever way to store everything in a single 64 bit INT, it's clearly
+not scalable. And that would be fine if this were an app that could have instances spun up for individual
+polycules, and those polycules couldn't be larger than 64 people. But that's not necessarily how relationships
+work. Polycules can sprawl, and while it's likely that everyone to some extent thinks of themselves as the center
+of the universe, no one actually is. And besides, RADAR can be used for more than poly, it can be used for any
+type of relationship.
+
+Next, I suspect that it will be rare (but *will* occasionally happen) for there to be RADAR check-ins with the whole
+polycule together. I don't want to limit the number of people who can be in a check-in, but I also realize that
+most of the time, a check-in will have two people.
+
+So I want to replace that bitmap with a partner_id_list, which is a sorted, comma-separated list of the partners
+attending a check-in. That way, a specific list of partners will map to all of the check-ins that have included
+all of those partners and no others.
+
+The next thing I need to do is to have some concept of users, logins, security. That means, people will need
+passwords. There will need to be a login page. And every check-in you host should have you as a member.
+
+And then, along with this, there should be a way for a user to get a list of all of *their* action points,
+regardless of who else was in the check-in (these action points should probably have an indication of who
+was in the check-in where they originated.) That way you can look at all of your own action points as a
+sort of todo list.
